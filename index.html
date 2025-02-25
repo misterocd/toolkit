@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeoSearch Toolkit</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Modern Apple-inspired Design */
+    :root {
+      --primary-color: rgba(255,255,255,0.15);
+      --accent-color: #0A84FF;
+      --background: #000000;
+      --text-primary: #FFFFFF;
+      --text-secondary: #86868B;
+      --frosted-glass: blur(20px);
+      --border-radius: 18px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background) url('https://www.transparenttextures.com/patterns/black-paper.png');
+      color: var(--text-primary);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: var(--frosted-glass);
+    }
+
+    .container {
+      background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border-radius: var(--border-radius);
+      padding: 2.5rem;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      backdrop-filter: var(--frosted-glass);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+      background: linear-gradient(120deg, #fff 30%, #aaa 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 16px rgba(0,132,255,0.2);
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    .tool-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .tool-buttons button {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 14px;
+      background: var(--primary-color);
+      color: var(--text-primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .tool-buttons button.active {
+      background: var(--accent-color);
+      box-shadow: 0 4px 16px rgba(10,132,255,0.3);
+    }
+
+    .input-group {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 1.2rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(10,132,255,0.15);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    button {
+      flex: 1;
+      padding: 1.2rem 2rem;
+      border: none;
+      border-radius: 14px;
+      background: var(--accent-color);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.1);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:active::before {
+      opacity: 1;
+      animation: breath 0.6s ease-out;
+    }
+
+    @keyframes breath {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .output-container {
+      position: relative;
+      background: rgba(255,255,255,0.03);
+      border-radius: 14px;
+      padding: 1.5rem;
+      min-height: 100px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .copy-button:hover {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    #output {
+      white-space: pre-wrap;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NeoSearch</h1>
+
+    <!-- Tool Selection Buttons -->
+    <div class="tool-buttons">
+      <button class="active">
+        <i class="fas fa-search"></i> Boolean Formatter
+      </button>
+      <button disabled>
+        <i class="fas fa-chart-network"></i> Analyzer
+      </button>
+      <button disabled>
+        <i class="fas fa-database"></i> Optimizer
+      </button>
+    </div>
+
+    <!-- Input Fields -->
+    <div class="input-group">
+      <label for="names">Names (one per line)</label>
+      <textarea id="names" rows="8" placeholder="Enter names..."></textarea>
+    </div>
+
+    <div class="input-group">
+      <label for="company">Company Names (optional)</label>
+      <input type="text" id="company" placeholder="Company1 OR Company2">
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button onclick="formatOutput()">
+        <i class="fas fa-wand-magic-sparkles"></i> Generate
+      </button>
+      <button class="secondary" onclick="clearForm()" style="background: var(--primary-color);">
+        <i class="fas fa-eraser"></i> Clear
+      </button>
+    </div>
+
+    <!-- Output Section -->
+    <div class="output-container">
+      <button class="copy-button" onclick="copyOutput()">
+        <i class="fas fa-copy"></i> Copy
+      </button>
+      <pre id="output"></pre>
+    </div>
+  </div>
+
+  <!-- JavaScript remains the same as previous version -->
+  <script>
+    function formatOutput() {
+      const namesInput = document.getElementById('names').value.trim();
+      const companyInput = document.getElementById('company').value.trim();
+
+      // Remove duplicates using Set
+      const uniqueNames = [...new Set(namesInput.split('\n').map(n => n.trim()).filter(Boolean))];
+      
+      let formattedNames = [];
+      uniqueNames.forEach(name => {
+        // Clean and process each name
+        let cleanedName = name
+          .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
+          .replace(/\s[A-Z]\.\s*/g, ' ');
+
+        // Create variations for special characters
+        const variations = createSpecialCharVariations(cleanedName);
+        variations.forEach(variation => {
+          const parts = variation.split(' ');
+          if (parts.length >= 3) {
+            formattedNames.push(`"${parts[0]} ${parts[1]} ${parts[2]}"`);
+            formattedNames.push(`"${parts[0]} ${parts[2]}"`);
+            formattedNames.push(`"${parts[2]} ${parts[0]}"`);
+            formattedNames.push(`"${parts[0]} ${parts[1]}"`);
+            formattedNames.push(`"${parts[1]} ${parts[2]}"`);
+            formattedNames.push(`"${parts[2]} ${parts[1]}"`);
+          } else if (parts.length === 2) {
+            formattedNames.push(`"${parts[0]} ${parts[1]}"`);
+            formattedNames.push(`"${parts[1]} ${parts[0]}"`);
+            // Add variations with special characters replaced in both parts
+            const part1Variations = createSpecialCharVariations(parts[0]);
+            const part2Variations = createSpecialCharVariations(parts[1]);
+            part1Variations.forEach(p1 => {
+              part2Variations.forEach(p2 => {
+                formattedNames.push(`"${p1} ${p2}"`);
+                formattedNames.push(`"${p2} ${p1}"`);
+              });
+            });
+          } else {
+            formattedNames.push(`"${variation}"`);
+          }
+        });
+      });
+
+      // Remove duplicate variations
+      const uniqueFormattedNames = [...new Set(formattedNames)];
+
+      // Handle company input
+      let output;
+      if (companyInput) {
+        const companies = companyInput.split(' OR ').map(c => `"${c.trim()}"`);
+        const companyStr = companies.length > 1 ? `(${companies.join(' OR ')})` : companies[0];
+        output = `${companyStr} AND (${uniqueFormattedNames.join(' OR ')})`;
+      } else {
+        output = uniqueFormattedNames.join(' OR ');
+      }
+
+      document.getElementById('output').textContent = output;
+    }
+
+    function createSpecialCharVariations(name) {
+      const variations = [name];
+      const replacements = {
+        'ü': 'ue',
+        'ö': 'oe',
+        'ä': 'ae',
+        'ß': 'ss',
+        'é': 'e',
+        'ó': 'o'
+      };
+
+      // Create variations with replaced characters
+      Object.entries(replacements).forEach(([char, replacement]) => {
+        if (name.includes(char)) {
+          variations.push(name.replace(new RegExp(char, 'g'), replacement));
+        }
+      });
+
+      return [...new Set(variations)]; // Remove duplicate variations
+    }
+
+    function copyOutput() {
+      navigator.clipboard.writeText(document.getElementById('output').textContent)
+        .catch(err => console.error('Copy failed:', err));
+    }
+
+    function clearForm() {
+      document.getElementById('names').value = '';
+      document.getElementById('company').value = '';
+      document.getElementById('output').textContent = '';
+    }
+  </script>
+</body>
+</html>
