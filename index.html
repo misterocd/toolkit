@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    /* Modern Apple-inspired Design */
     :root {
       --primary-color: rgba(255,255,255,0.15);
       --accent-color: #0A84FF;
@@ -122,13 +121,13 @@
     }
 
     .button-group {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
     }
 
     button {
-      flex: 1;
       padding: 1.2rem 2rem;
       border: none;
       border-radius: 14px;
@@ -207,7 +206,6 @@
   <div class="container">
     <h1>NeoSearch</h1>
 
-    <!-- Tool Selection Buttons -->
     <div class="tool-buttons">
       <button class="active">
         <i class="fas fa-search"></i> Boolean Formatter
@@ -220,7 +218,6 @@
       </button>
     </div>
 
-    <!-- Input Fields -->
     <div class="input-group">
       <label for="names">Names (one per line)</label>
       <textarea id="names" rows="8" placeholder="Enter names..."></textarea>
@@ -231,17 +228,18 @@
       <input type="text" id="company" placeholder="Company1 OR Company2">
     </div>
 
-    <!-- Action Buttons -->
     <div class="button-group">
       <button onclick="formatOutput()">
         <i class="fas fa-wand-magic-sparkles"></i> Generate
+      </button>
+      <button onclick="formatSimpleOutput()">
+        <i class="fas fa-bolt"></i> Generate Exact
       </button>
       <button class="secondary" onclick="clearForm()" style="background: var(--primary-color);">
         <i class="fas fa-eraser"></i> Clear
       </button>
     </div>
 
-    <!-- Output Section -->
     <div class="output-container">
       <button class="copy-button" onclick="copyOutput()">
         <i class="fas fa-copy"></i> Copy
@@ -250,23 +248,19 @@
     </div>
   </div>
 
-  <!-- JavaScript remains the same as previous version -->
   <script>
     function formatOutput() {
       const namesInput = document.getElementById('names').value.trim();
       const companyInput = document.getElementById('company').value.trim();
 
-      // Remove duplicates using Set
       const uniqueNames = [...new Set(namesInput.split('\n').map(n => n.trim()).filter(Boolean))];
       
       let formattedNames = [];
       uniqueNames.forEach(name => {
-        // Clean and process each name
         let cleanedName = name
           .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
           .replace(/\s[A-Z]\.\s*/g, ' ');
 
-        // Create variations for special characters
         const variations = createSpecialCharVariations(cleanedName);
         variations.forEach(variation => {
           const parts = variation.split(' ');
@@ -280,7 +274,6 @@
           } else if (parts.length === 2) {
             formattedNames.push(`"${parts[0]} ${parts[1]}"`);
             formattedNames.push(`"${parts[1]} ${parts[0]}"`);
-            // Add variations with special characters replaced in both parts
             const part1Variations = createSpecialCharVariations(parts[0]);
             const part2Variations = createSpecialCharVariations(parts[1]);
             part1Variations.forEach(p1 => {
@@ -295,10 +288,8 @@
         });
       });
 
-      // Remove duplicate variations
       const uniqueFormattedNames = [...new Set(formattedNames)];
 
-      // Handle company input
       let output;
       if (companyInput) {
         const companies = companyInput.split(' OR ').map(c => `"${c.trim()}"`);
@@ -306,6 +297,33 @@
         output = `${companyStr} AND (${uniqueFormattedNames.join(' OR ')})`;
       } else {
         output = uniqueFormattedNames.join(' OR ');
+      }
+
+      document.getElementById('output').textContent = output;
+    }
+
+    function formatSimpleOutput() {
+      const namesInput = document.getElementById('names').value.trim();
+      const companyInput = document.getElementById('company').value.trim();
+
+      const uniqueNames = [...new Set(namesInput.split('\n').map(n => n.trim()).filter(Boolean))];
+      const cleanedNames = uniqueNames.map(name => {
+        return name
+          .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
+          .replace(/\s[A-Z]\.\s*/g, ' ')
+          .trim();
+      });
+      const uniqueCleaned = [...new Set(cleanedNames)];
+      const formattedNames = uniqueCleaned.map(name => `"${name}"`);
+
+      let output;
+      if (companyInput) {
+        const companies = companyInput.split(' OR ').map(c => `"${c.trim()}"`);
+        const companyStr = companies.length > 1 ? `(${companies.join(' OR ')})` : companies[0];
+        const nameStr = formattedNames.length > 1 ? `(${formattedNames.join(' OR ')})` : formattedNames[0];
+        output = `${companyStr} AND ${nameStr}`;
+      } else {
+        output = formattedNames.join(' OR ');
       }
 
       document.getElementById('output').textContent = output;
@@ -322,14 +340,13 @@
         'ó': 'o'
       };
 
-      // Create variations with replaced characters
       Object.entries(replacements).forEach(([char, replacement]) => {
         if (name.includes(char)) {
           variations.push(name.replace(new RegExp(char, 'g'), replacement));
         }
       });
 
-      return [...new Set(variations)]; // Remove duplicate variations
+      return [...new Set(variations)];
     }
 
     function copyOutput() {
