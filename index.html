@@ -18,7 +18,6 @@
       --border-radius: 20px;
       --shadow-elevation: 0 12px 32px rgba(0,0,0,0.3);
     }
-
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--background) url('https://www.transparenttextures.com/patterns/black-paper.png');
@@ -31,12 +30,10 @@
       backdrop-filter: var(--frosted-glass);
       animation: fadeIn 0.5s ease-out;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .container {
       background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
       border-radius: var(--border-radius);
@@ -47,7 +44,6 @@
       border: 1px solid rgba(255,255,255,0.1);
       backdrop-filter: var(--frosted-glass);
     }
-
     h1 {
       font-size: 2.8rem;
       font-weight: 700;
@@ -60,12 +56,10 @@
       text-shadow: 0 4px 16px rgba(0,132,255,0.2);
       animation: slideDown 0.5s ease-out;
     }
-
     @keyframes slideDown {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     h1::after {
       content: '';
       position: absolute;
@@ -78,20 +72,17 @@
       border-radius: 2px;
       animation: pulse 1.5s infinite ease-in-out;
     }
-
     @keyframes pulse {
       0% { width: 60px; opacity: 0.7; }
       50% { width: 70px; opacity: 1; }
       100% { width: 60px; opacity: 0.7; }
     }
-
     .tool-buttons {
       display: flex;
       gap: 1rem;
       margin-bottom: 2rem;
       justify-content: center;
     }
-
     .tool-buttons button {
       padding: 1rem 2rem;
       border: none;
@@ -104,23 +95,19 @@
       border: 1px solid rgba(255,255,255,0.1);
       animation: fadeInButton 0.5s ease-out;
     }
-
     @keyframes fadeInButton {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
-
     .tool-buttons button.active {
       background: var(--accent-color);
       box-shadow: 0 4px 16px rgba(10,132,255,0.3);
     }
-
     .input-group {
       margin-bottom: 2rem;
       position: relative;
       width: 100%; /* Ensure input groups take full width */
     }
-
     label {
       display: block;
       margin-bottom: 0.8rem;
@@ -129,9 +116,8 @@
       font-weight: 500;
       transition: color 0.3s ease;
     }
-
     textarea, input {
-      width: calc(100% - 2.4rem); /* Adjusted width to match output container */
+      width: 100%; /* Make inputs take full width */
       padding: 1.2rem;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.1);
@@ -140,29 +126,26 @@
       font-size: 1rem;
       transition: all 0.3s;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-      box-sizing: border-box; /* Ensure padding is included in width */
+      box-sizing: border-box; /* Include padding in width calculation */
     }
-
     textarea:focus, input:focus {
       outline: none;
       border-color: var(--accent-color);
       box-shadow: 0 0 0 3px rgba(10,132,255,0.15);
       animation: pulseFocus 0.3s ease-out;
     }
-
     @keyframes pulseFocus {
       0% { box-shadow: 0 0 0 0 rgba(10,132,255,0.15); }
       50% { box-shadow: 0 0 0 5px rgba(10,132,255,0.1); }
       100% { box-shadow: 0 0 0 3px rgba(10,132,255,0.15); }
     }
-
     .button-group {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
+      width: 100%; /* Ensure button group takes full width */
     }
-
     button {
       padding: 1.2rem 2rem;
       border: none;
@@ -176,16 +159,13 @@
       overflow: hidden;
       animation: fadeInButton 0.5s ease-out;
     }
-
     button:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(10,132,255,0.4);
     }
-
     button:active {
       transform: scale(0.98);
     }
-
     button::before {
       content: '';
       position: absolute;
@@ -197,17 +177,14 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
-
     button:active::before {
       opacity: 1;
       animation: breath 0.6s ease-out;
     }
-
     @keyframes breath {
       0% { transform: scale(1); opacity: 1; }
       100% { transform: scale(1.5); opacity: 0; }
     }
-
     .output-container {
       position: relative;
       background: rgba(255,255,255,0.03);
@@ -219,18 +196,15 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.3) transparent;
       width: 100%; /* Ensure output container takes full width */
-      box-sizing: border-box; /* Ensure padding is included in width */
+      box-sizing: border-box; /* Include padding in width calculation */
     }
-
     .output-container::-webkit-scrollbar {
       width: 8px;
     }
-
     .output-container::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,0.3);
       border-radius: 10px;
     }
-
     .copy-button {
       position: absolute;
       top: 1rem;
@@ -244,12 +218,10 @@
       transition: all 0.3s;
       font-weight: 500;
     }
-
     .copy-button:hover {
       background: var(--accent-color);
       border-color: var(--accent-color);
     }
-
     #output {
       white-space: pre-wrap;
       font-family: 'SF Mono', Menlo, monospace;
@@ -262,7 +234,6 @@
 <body>
   <div class="container">
     <h1>NeoSearch</h1>
-
     <div class="tool-buttons">
       <button class="active">
         <i class="fas fa-search"></i> Boolean Formatter
@@ -274,17 +245,14 @@
         <i class="fas fa-database"></i> Optimizer
       </button>
     </div>
-
     <div class="input-group">
       <label for="names">Names (one per line)</label>
       <textarea id="names" rows="8" placeholder="Enter names..."></textarea>
     </div>
-
     <div class="input-group">
       <label for="company">Company Names (optional)</label>
       <input type="text" id="company" placeholder="Company1 OR Company2">
     </div>
-
     <div class="button-group">
       <button onclick="formatOutput()">
         <i class="fas fa-wand-magic-sparkles"></i> Generate
@@ -296,7 +264,6 @@
         <i class="fas fa-eraser"></i> Clear
       </button>
     </div>
-
     <div class="output-container">
       <button class="copy-button" onclick="copyOutput()">
         <i class="fas fa-copy"></i> Copy
@@ -304,7 +271,6 @@
       <pre id="output"></pre>
     </div>
   </div>
-
   <script>
     // Enhanced with extension animations and interactions
     function formatOutput() {
@@ -317,7 +283,6 @@
         let cleanedName = name
           .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
           .replace(/\s[A-Z]\.\s*/g, ' ');
-
         const variations = createSpecialCharVariations(cleanedName);
         variations.forEach(variation => {
           const parts = variation.split(' ');
@@ -344,7 +309,6 @@
           }
         });
       });
-
       const uniqueFormattedNames = [...new Set(formattedNames)];
       let output;
       if (companyInput) {
@@ -354,7 +318,6 @@
       } else {
         output = uniqueFormattedNames.join(' OR ');
       }
-
       const outputElement = document.getElementById('output');
       outputElement.textContent = output;
       outputElement.style.opacity = 0;
@@ -363,7 +326,6 @@
         outputElement.style.opacity = 1;
       }, 10);
     }
-
     function formatSimpleOutput() {
       const namesInput = document.getElementById('names').value.trim();
       const companyInput = document.getElementById('company').value.trim();
@@ -388,7 +350,6 @@
       } else {
         output = formattedNames.join(' OR ');
       }
-
       const outputElement = document.getElementById('output');
       outputElement.textContent = output;
       outputElement.style.opacity = 0;
@@ -397,23 +358,19 @@
         outputElement.style.opacity = 1;
       }, 10);
     }
-
     function createSpecialCharVariations(name) {
       const variations = [name];
       const replacements = {
         'ü': 'ue', 'ö': 'oe', 'ä': 'ae',
         'ß': 'ss', 'é': 'e', 'ó': 'o'
       };
-
       Object.entries(replacements).forEach(([char, replacement]) => {
         if (name.includes(char)) {
           variations.push(name.replace(new RegExp(char, 'g'), replacement));
         }
       });
-
       return [...new Set(variations)];
     }
-
     function copyOutput() {
       const copyButton = document.querySelector('.copy-button');
       navigator.clipboard.writeText(document.getElementById('output').textContent)
@@ -427,13 +384,11 @@
         })
         .catch(err => console.error('Copy failed:', err));
     }
-
     function clearForm() {
       document.getElementById('names').value = '';
       document.getElementById('company').value = '';
       document.getElementById('output').textContent = '';
     }
-
     // Added extension interactions
     document.querySelectorAll('button, textarea, input').forEach(element => {
       element.addEventListener('mouseenter', () => {
@@ -443,20 +398,17 @@
         element.style.transform = 'translateY(0)';
       });
     });
-
     const textarea = document.getElementById('names');
     textarea.addEventListener('input', function() {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 300) + 'px';
     });
-
     document.getElementById('names').addEventListener('keypress', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         formatOutput();
       }
     });
-
     document.getElementById('company').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
