@@ -281,8 +281,7 @@
       let formattedNames = [];
       uniqueNames.forEach(name => {
         let cleanedName = name
-         // .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
-          .replace(/(Dr\.|Prof(?:\.|essor)?|Mr\.|Ms\.|Mrs\.|Herr(?:\.)?|Frau(?:\.)?)\s*/g, '')
+          .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
           .replace(/\s[A-Z]\.\s*/g, ' ');
         const variations = createSpecialCharVariations(cleanedName);
         variations.forEach(variation => {
@@ -334,8 +333,7 @@
       
       const cleanedNames = uniqueNames.map(name => {
         return name
-          //.replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
-          .replace(/(Dr\.|Prof(?:\.|essor)?|Mr\.|Ms\.|Mrs\.|Herr(?:\.)?|Frau(?:\.)?)\s*/g, '')
+          .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
           .replace(/\s[A-Z]\.\s*/g, ' ')
           .trim();
       });
