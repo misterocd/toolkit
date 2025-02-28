@@ -283,8 +283,7 @@
         let cleanedName = name
          // .replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
           .replace(/(Dr\.|Prof(?:\.|essor)?|Mr\.|Ms\.|Mrs\.|Herr(?:\.)?|Frau(?:\.)?)\s*/g, '')
-          //.replace(/\s[A-Z]\.\s*/g, ' ');
-          .replace(/\s[A-Za-z]\.?\s*/g, ' ');
+          .replace(/\s[A-Z]\.\s*/g, ' ');
         const variations = createSpecialCharVariations(cleanedName);
         variations.forEach(variation => {
           const parts = variation.split(' ');
@@ -337,8 +336,7 @@
         return name
           //.replace(/(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/g, '')
           .replace(/(Dr\.|Prof(?:\.|essor)?|Mr\.|Ms\.|Mrs\.|Herr(?:\.)?|Frau(?:\.)?)\s*/g, '')
-          //.replace(/\s[A-Z]\.\s*/g, ' ')
-          .replace(/\s[A-Za-z]\.?\s*/g, ' ')
+          .replace(/\s[A-Z]\.\s*/g, ' ')
           .trim();
       });
       
