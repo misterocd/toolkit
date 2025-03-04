@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    /* Modern Apple-inspired Design with Extension Animations */
+    /* Your provided styling here */
     :root {
       --primary-color: rgba(255,255,255,0.15);
       --accent-color: #0A84FF;
@@ -17,6 +17,7 @@
       --frosted-glass: blur(20px);
       --border-radius: 20px;
       --shadow-elevation: 0 12px 32px rgba(0,0,0,0.3);
+      --danger: #ef4444; /* Red color for clear button */
     }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -29,6 +30,8 @@
       align-items: center;
       backdrop-filter: var(--frosted-glass);
       animation: fadeIn 0.5s ease-out;
+      background-image: radial-gradient(circle at 25% 25%, rgba(48, 54, 148, 0.2) 0%, transparent 45%),
+                        radial-gradient(circle at 75% 75%, rgba(10, 132, 255, 0.2) 0%, transparent 45%);
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -103,6 +106,14 @@
       background: var(--accent-color);
       box-shadow: 0 4px 16px rgba(10,132,255,0.3);
     }
+    
+    /* Tool Container */
+    .tool-container {
+      position: relative;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+    
     .input-group {
       margin-bottom: 2rem;
       position: relative;
@@ -128,6 +139,25 @@
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
       box-sizing: border-box; /* Include padding in width calculation */
     }
+    
+    textarea {
+      height: auto;
+      min-height: 120px;
+      resize: vertical;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.3) transparent;
+    }
+    
+    textarea::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
+    }
+    
     textarea:focus, input:focus {
       outline: none;
       border-color: var(--accent-color);
@@ -185,6 +215,12 @@
       0% { transform: scale(1); opacity: 1; }
       100% { transform: scale(1.5); opacity: 0; }
     }
+    
+    /* Clear button color */
+    .secondary {
+      background: var(--danger) !important;
+    }
+    
     .output-container {
       position: relative;
       background: rgba(255,255,255,0.03);
@@ -229,49 +265,180 @@
       line-height: 1.6;
       animation: fadeIn 0.5s ease-out;
     }
+    
+    /* Tab switching */
+    #formatter-container {
+      position: relative;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+    }
+    
+    #analyzer-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    /* Name Analyzer Specific Styles */
+    #results {
+      margin-bottom: 1rem;
+    }
+    
+    .result {
+      margin: 0.8rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: cardAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+    
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .male {
+      border-left: 4px solid var(--accent-color);
+    }
+    
+    .female {
+      border-left: 4px solid #f472b6;
+    }
+    
+    .unknown {
+      border-left: 4px solid #64748b;
+    }
+    
+    .details {
+      margin-top: 0.5rem;
+      font-size: 0.85em;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    
+    .warning {
+      color: var(--danger);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>NeoSearch</h1>
     <div class="tool-buttons">
-      <button class="active">
+      <button id="formatter-btn" class="active">
         <i class="fas fa-search"></i> Boolean Formatter
       </button>
-      <button disabled>
-        <i class="fas fa-chart-network"></i> Analyzer
+      <button id="analyzer-btn">
+        <i class="fas fa-user-tag"></i> Name Analyzer
       </button>
       <button disabled>
         <i class="fas fa-database"></i> Optimizer
       </button>
     </div>
-    <div class="input-group">
-      <label for="names">Names (one per line)</label>
-      <textarea id="names" rows="8" placeholder="Enter names..."></textarea>
-    </div>
-    <div class="input-group">
-      <label for="company">Company Names (optional)</label>
-      <input type="text" id="company" placeholder="Company1 OR Company2">
-    </div>
-    <div class="button-group">
-      <button onclick="formatOutput()">
-        <i class="fas fa-wand-magic-sparkles"></i> Variations
-      </button>
-      <button onclick="formatSimpleOutput()">
-        <i class="fas fa-bolt"></i> Exact
-      </button>
-      <button class="secondary" onclick="clearForm()">
-        <i class="fas fa-eraser"></i> Clear
-      </button>
-    </div>
-    <div class="output-container">
-      <button class="copy-button" onclick="copyOutput()">
-        <i class="fas fa-copy"></i> Copy
-      </button>
-      <pre id="output"></pre>
+    
+    <div class="tool-container">
+      <!-- Boolean Formatter Tool -->
+      <div id="formatter-container">
+        <div class="input-group">
+          <label for="names">Names (one per line)</label>
+          <textarea id="names" rows="8" placeholder="Enter names..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="company">Company Names (optional)</label>
+          <input type="text" id="company" placeholder="Company1 OR Company2">
+        </div>
+        <div class="button-group">
+          <button onclick="formatOutput()">
+            <i class="fas fa-wand-magic-sparkles"></i> Variations
+          </button>
+          <button onclick="formatSimpleOutput()">
+            <i class="fas fa-bolt"></i> Exact
+          </button>
+          <button class="secondary" onclick="clearForm()">
+            <i class="fas fa-eraser"></i> Clear
+          </button>
+        </div>
+        <div class="output-container">
+          <button class="copy-button" onclick="copyOutput()">
+            <i class="fas fa-copy"></i> Copy
+          </button>
+          <pre id="output"></pre>
+        </div>
+      </div>
+      
+      <!-- Name Analyzer Tool -->
+      <div id="analyzer-container">
+        <div class="input-group">
+          <label for="names-analyzer">Names (one per line)</label>
+          <textarea id="names-analyzer" rows="8" placeholder="Enter full names..."></textarea>
+          <div class="warning" id="name-warning">Are you sure you want to analyze more than 4 names? This may take a while.</div>
+        </div>
+        <div class="input-group">
+          <label for="country">Country Code</label>
+          <input type="text" id="country" placeholder="Country Code (e.g., US)">
+        </div>
+        <div class="button-group">
+          <button onclick="splitNames()">
+            <i class="fas fa-scissors"></i> Split Names
+          </button>
+          <button onclick="analyzeGender()">
+            <i class="fas fa-venus-mars"></i> Analyze Gender
+          </button>
+          <button class="secondary" onclick="clearAnalyzer()">
+            <i class="fas fa-eraser"></i> Clear
+          </button>
+        </div>
+        <div id="results"></div>
+      </div>
     </div>
   </div>
   <script>
+    // Tab Switching Logic
+    document.getElementById('formatter-btn').addEventListener('click', function() {
+      document.getElementById('formatter-container').style.opacity = '1';
+      document.getElementById('formatter-container').style.pointerEvents = 'auto';
+      document.getElementById('analyzer-container').style.opacity = '0';
+      document.getElementById('analyzer-container').style.pointerEvents = 'none';
+      document.getElementById('formatter-btn').classList.add('active');
+      document.getElementById('analyzer-btn').classList.remove('active');
+    });
+    document.getElementById('analyzer-btn').addEventListener('click', function() {
+      document.getElementById('formatter-container').style.opacity = '0';
+      document.getElementById('formatter-container').style.pointerEvents = 'none';
+      document.getElementById('analyzer-container').style.opacity = '1';
+      document.getElementById('analyzer-container').style.pointerEvents = 'auto';
+      document.getElementById('formatter-btn').classList.remove('active');
+      document.getElementById('analyzer-btn').classList.add('active');
+    });
+    
+    // Name Analyzer Warning Logic
+    document.getElementById('names-analyzer').addEventListener('input', function() {
+      const names = this.value.split('\n').filter(n => n.trim().length > 0);
+      const warning = document.getElementById('name-warning');
+      if (names.length > 4) {
+        warning.style.display = 'block';
+      } else {
+        warning.style.display = 'none';
+      }
+    });
+    
     // Enhanced with extension animations and interactions
     function formatOutput() {
       const namesInput = document.getElementById('names').value.trim();
@@ -326,6 +493,7 @@
         outputElement.style.opacity = 1;
       }, 10);
     }
+    
     function formatSimpleOutput() {
       const namesInput = document.getElementById('names').value.trim();
       const companyInput = document.getElementById('company').value.trim();
@@ -358,6 +526,7 @@
         outputElement.style.opacity = 1;
       }, 10);
     }
+    
     function createSpecialCharVariations(name) {
       const variations = [name];
       const replacements = {
@@ -371,6 +540,7 @@
       });
       return [...new Set(variations)];
     }
+    
     function copyOutput() {
       const copyButton = document.querySelector('.copy-button');
       navigator.clipboard.writeText(document.getElementById('output').textContent)
@@ -384,11 +554,139 @@
         })
         .catch(err => console.error('Copy failed:', err));
     }
+    
     function clearForm() {
       document.getElementById('names').value = '';
       document.getElementById('company').value = '';
       document.getElementById('output').textContent = '';
     }
+    
+    // Name Analyzer Functions - FIXED IMPLEMENTATION
+    function clearAnalyzer() {
+      document.getElementById('names-analyzer').value = '';
+      document.getElementById('country').value = '';
+      document.getElementById('results').innerHTML = '';
+    }
+    
+    async function splitNames() {
+      const fullNames = getInputNames();
+      if (!fullNames.length) return;
+      
+      try {
+        const parsed = await parseNames(fullNames);
+        displaySplitResults(parsed);
+      } catch (error) {
+        showError(error);
+      }
+    }
+    
+    async function analyzeGender() {
+      const fullNames = getInputNames();
+      const country = document.getElementById('country').value || 'US';
+      if (!fullNames.length) return;
+      
+      try {
+        const parsed = await parseNames(fullNames);
+        const genderData = await getGenderInfo(parsed, country);
+        displayGenderResults(parsed, genderData);
+      } catch (error) {
+        showError(error);
+      }
+    }
+    
+    function getInputNames() {
+      return document.getElementById('names-analyzer').value
+        .split('\n')
+        .map(n => n.trim())
+        .filter(n => n.length > 0);
+    }
+    
+    async function parseNames(fullNames) {
+      const response = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/parseNameBatch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': '7d93f7164aacaf766698e079dee1ae1e'
+        },
+        body: JSON.stringify({
+          personalNames: fullNames.map(name => ({ name }))
+        })
+      });
+      const data = await response.json();
+      return data.personalNames.map(n => ({
+        fullName: n.name,
+        firstName: n.firstLastName.firstName,
+        lastName: n.firstLastName.lastName
+      }));
+    }
+    
+    async function getGenderInfo(names, country) {
+      const response = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/genderGeoBatch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': '7d93f7164aacaf766698e079dee1ae1e'
+        },
+        body: JSON.stringify({
+          personalNames: names.map(name => ({
+            firstName: name.firstName,
+            lastName: name.lastName,
+            countryIso2: country
+          }))
+        })
+      });
+      const data = await response.json();
+      return data.personalNames.map(n => ({
+        gender: n.likelyGender,
+        confidence: n.probabilityCalibrated
+      }));
+    }
+    
+    function displaySplitResults(results) {
+      document.getElementById('results').innerHTML = '';
+      results.forEach((result, index) => {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'result unknown';
+        resultDiv.innerHTML = `
+          <strong>${result.fullName}</strong>
+          <div class="details">
+            First Name: ${result.firstName}<br>
+            Last Name: ${result.lastName}
+          </div>
+        `;
+        setTimeout(() => {
+          document.getElementById('results').appendChild(resultDiv);
+        }, index * 100); // Stagger animation
+      });
+    }
+    
+    function displayGenderResults(names, genderData) {
+      document.getElementById('results').innerHTML = '';
+      names.forEach((name, index) => {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = `result ${genderData[index].gender?.toLowerCase() || 'unknown'}`;
+        resultDiv.innerHTML = `
+          <strong>${name.fullName}</strong>
+          <div class="details">
+            Gender: ${genderData[index].gender || 'Unknown'} 
+            (${Math.round(genderData[index].confidence * 100)}% confidence)
+          </div>
+        `;
+        setTimeout(() => {
+          document.getElementById('results').appendChild(resultDiv);
+        }, index * 100); // Stagger animation
+      });
+    }
+    
+    function showError(error) {
+      document.getElementById('results').innerHTML = `
+        <div class="result unknown">
+          <strong>Error</strong>
+          <div class="details">${error.message || 'An unknown error occurred'}</div>
+        </div>
+      `;
+    }
+    
     // Added extension interactions
     document.querySelectorAll('button, textarea, input').forEach(element => {
       element.addEventListener('mouseenter', () => {
@@ -398,17 +696,20 @@
         element.style.transform = 'translateY(0)';
       });
     });
+    
     const textarea = document.getElementById('names');
     textarea.addEventListener('input', function() {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 300) + 'px';
     });
+    
     document.getElementById('names').addEventListener('keypress', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         formatOutput();
       }
     });
+    
     document.getElementById('company').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
