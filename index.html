@@ -6,8 +6,8 @@
   <title>NeoSearch Toolkit</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
   <style>
-    /* Your provided styling here */
     :root {
       --primary-color: rgba(255,255,255,0.15);
       --accent-color: #0A84FF;
@@ -17,8 +17,9 @@
       --frosted-glass: blur(20px);
       --border-radius: 20px;
       --shadow-elevation: 0 12px 32px rgba(0,0,0,0.3);
-      --danger: #ef4444; /* Red color for clear button */
+      --danger: #ef4444;
     }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--background) url('https://www.transparenttextures.com/patterns/black-paper.png');
@@ -33,10 +34,12 @@
       background-image: radial-gradient(circle at 25% 25%, rgba(48, 54, 148, 0.2) 0%, transparent 45%),
                         radial-gradient(circle at 75% 75%, rgba(10, 132, 255, 0.2) 0%, transparent 45%);
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     .container {
       background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
       border-radius: var(--border-radius);
@@ -46,7 +49,9 @@
       box-shadow: var(--shadow-elevation);
       border: 1px solid rgba(255,255,255,0.1);
       backdrop-filter: var(--frosted-glass);
+      position: relative;
     }
+
     h1 {
       font-size: 2.8rem;
       font-weight: 700;
@@ -59,10 +64,12 @@
       text-shadow: 0 4px 16px rgba(0,132,255,0.2);
       animation: slideDown 0.5s ease-out;
     }
+
     @keyframes slideDown {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     h1::after {
       content: '';
       position: absolute;
@@ -75,17 +82,20 @@
       border-radius: 2px;
       animation: pulse 1.5s infinite ease-in-out;
     }
+
     @keyframes pulse {
       0% { width: 60px; opacity: 0.7; }
       50% { width: 70px; opacity: 1; }
       100% { width: 60px; opacity: 0.7; }
     }
+
     .tool-buttons {
       display: flex;
       gap: 1rem;
       margin-bottom: 2rem;
       justify-content: center;
     }
+
     .tool-buttons button {
       padding: 1rem 2rem;
       border: none;
@@ -98,27 +108,29 @@
       border: 1px solid rgba(255,255,255,0.1);
       animation: fadeInButton 0.5s ease-out;
     }
+
     @keyframes fadeInButton {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
+
     .tool-buttons button.active {
       background: var(--accent-color);
       box-shadow: 0 4px 16px rgba(10,132,255,0.3);
     }
-    
-    /* Tool Container */
+
     .tool-container {
       position: relative;
       width: 100%;
       transition: all 0.3s ease;
     }
-    
+
     .input-group {
       margin-bottom: 2rem;
       position: relative;
-      width: 100%; /* Ensure input groups take full width */
+      width: 100%;
     }
+
     label {
       display: block;
       margin-bottom: 0.8rem;
@@ -127,8 +139,9 @@
       font-weight: 500;
       transition: color 0.3s ease;
     }
+
     textarea, input {
-      width: 100%; /* Make inputs take full width */
+      width: 100%;
       padding: 1.2rem;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.1);
@@ -137,9 +150,9 @@
       font-size: 1rem;
       transition: all 0.3s;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-      box-sizing: border-box; /* Include padding in width calculation */
+      box-sizing: border-box;
     }
-    
+
     textarea {
       height: auto;
       min-height: 120px;
@@ -148,34 +161,37 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.3) transparent;
     }
-    
+
     textarea::-webkit-scrollbar {
       width: 8px;
     }
-    
+
     textarea::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,0.3);
       border-radius: 10px;
     }
-    
+
     textarea:focus, input:focus {
       outline: none;
       border-color: var(--accent-color);
       box-shadow: 0 0 0 3px rgba(10,132,255,0.15);
       animation: pulseFocus 0.3s ease-out;
     }
+
     @keyframes pulseFocus {
       0% { box-shadow: 0 0 0 0 rgba(10,132,255,0.15); }
       50% { box-shadow: 0 0 0 5px rgba(10,132,255,0.1); }
       100% { box-shadow: 0 0 0 3px rgba(10,132,255,0.15); }
     }
+
     .button-group {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 2rem;
-      width: 100%; /* Ensure button group takes full width */
+      width: 100%;
     }
+
     button {
       padding: 1.2rem 2rem;
       border: none;
@@ -189,13 +205,16 @@
       overflow: hidden;
       animation: fadeInButton 0.5s ease-out;
     }
+
     button:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(10,132,255,0.4);
     }
+
     button:active {
       transform: scale(0.98);
     }
+
     button::before {
       content: '';
       position: absolute;
@@ -207,20 +226,21 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
+
     button:active::before {
       opacity: 1;
       animation: breath 0.6s ease-out;
     }
+
     @keyframes breath {
       0% { transform: scale(1); opacity: 1; }
       100% { transform: scale(1.5); opacity: 0; }
     }
-    
-    /* Clear button color */
+
     .secondary {
       background: var(--danger) !important;
     }
-    
+
     .output-container {
       position: relative;
       background: rgba(255,255,255,0.03);
@@ -231,16 +251,19 @@
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.3) transparent;
-      width: 100%; /* Ensure output container takes full width */
-      box-sizing: border-box; /* Include padding in width calculation */
+      width: 100%;
+      box-sizing: border-box;
     }
+
     .output-container::-webkit-scrollbar {
       width: 8px;
     }
+
     .output-container::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,0.3);
       border-radius: 10px;
     }
+
     .copy-button {
       position: absolute;
       top: 1rem;
@@ -254,27 +277,28 @@
       transition: all 0.3s;
       font-weight: 500;
     }
+
     .copy-button:hover {
       background: var(--accent-color);
       border-color: var(--accent-color);
     }
-    #output {
+
+    #output, #plz-output {
       white-space: pre-wrap;
       font-family: 'SF Mono', Menlo, monospace;
       font-size: 0.9rem;
       line-height: 1.6;
       animation: fadeIn 0.5s ease-out;
     }
-    
-    /* Tab switching */
+
     #formatter-container {
       position: relative;
       opacity: 1;
       transition: opacity 0.3s ease;
       pointer-events: auto;
     }
-    
-    #analyzer-container {
+
+    #analyzer-container, #plz-container {
       position: absolute;
       top: 0;
       left: 0;
@@ -283,12 +307,25 @@
       transition: opacity 0.3s ease;
       pointer-events: none;
     }
-    
-    /* Name Analyzer Specific Styles */
+
     #results {
       margin-bottom: 1rem;
+      min-height: 100px;
+      height: auto;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.3) transparent;
     }
-    
+
+    #results::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #results::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 10px;
+    }
+
     .result {
       margin: 0.8rem 0;
       padding: 1rem;
@@ -299,47 +336,160 @@
       animation: cardAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       opacity: 0;
     }
-    
+
     @keyframes cardAppear {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .male {
       border-left: 4px solid var(--accent-color);
     }
-    
+
     .female {
       border-left: 4px solid #f472b6;
     }
-    
+
     .unknown {
       border-left: 4px solid #64748b;
     }
-    
+
     .details {
       margin-top: 0.5rem;
       font-size: 0.85em;
       color: #cbd5e1;
       line-height: 1.6;
     }
-    
+
     .warning {
       color: var(--danger);
       font-size: 0.9rem;
       margin-top: 0.5rem;
       display: none;
     }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1rem;
+      color: var(--accent-color);
+      display: none;
+      animation: pulseText 1.5s infinite;
+    }
+
+    @keyframes pulseText {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+      background: var(--background);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 500px;
+      animation: modalIn 0.3s ease-out;
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .api-key-input {
+      width: 100%;
+      padding: 1rem;
+      margin: 1rem 0;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--accent-color);
+      border-radius: 12px;
+      color: white;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .key-status {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .key-status i {
+      color: #07F468;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      z-index: 1000;
+      animation: toastIn 0.3s ease-out;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
   </style>
 </head>
 <body>
+  <div id="apiKeyModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h3>Name Analyzer API Key</h3>
+      <p>Please enter your NamSor API key to use this feature:</p>
+      <input type="password" class="api-key-input" id="apiKeyInput" placeholder="Enter API Key...">
+      <div class="auth-buttons">
+        <button class="secondary" onclick="closeModal()">Cancel</button>
+        <button onclick="saveApiKey()">Save Key</button>
+      </div>
+      <div id="keyError" style="color: var(--danger); margin-top: 1rem; display: none;"></div>
+    </div>
+  </div>
+
   <div class="container">
+    <div class="key-status" id="keyStatus" style="display: none;">
+      <i class="fas fa-key"></i>
+      <span>API Key Active</span>
+      <button class="secondary" onclick="signOut()" style="margin-left: 1rem;">Sign Out</button>
+    </div>
+
     <h1>NeoSearch</h1>
     <div class="tool-buttons">
       <button id="formatter-btn" class="active">
@@ -348,13 +498,10 @@
       <button id="analyzer-btn">
         <i class="fas fa-user-tag"></i> Name Analyzer
       </button>
-      <button disabled>
-        <i class="fas fa-database"></i> Optimizer
-      </button>
+      <button id="plz-btn"><i class="fas fa-map-pin"></i> PLZ Finder</button>
     </div>
     
     <div class="tool-container">
-      <!-- Boolean Formatter Tool -->
       <div id="formatter-container">
         <div class="input-group">
           <label for="names">Names (one per line)</label>
@@ -383,7 +530,6 @@
         </div>
       </div>
       
-      <!-- Name Analyzer Tool -->
       <div id="analyzer-container">
         <div class="input-group">
           <label for="names-analyzer">Names (one per line)</label>
@@ -407,39 +553,132 @@
         </div>
         <div id="results"></div>
       </div>
+
+      <div id="plz-container">
+        <div class="input-group">
+          <label for="city-input">City Names (one per line)</label>
+          <textarea id="city-input" rows="8" placeholder="Enter city names..."></textarea>
+        </div>
+        <div class="button-group">
+          <button id="find-plz-btn" onclick="findLowestPLZ()">
+            <i class="fas fa-map-pin"></i> Find Lowest PLZ
+          </button>
+          <button class="secondary" onclick="clearPLZFinder()">
+            <i class="fas fa-eraser"></i> Clear
+          </button>
+        </div>
+        <div class="output-container">
+          <span class="loading" id="plz-loading">Searching...</span>
+          <button class="copy-button" onclick="copyPLZOutput()">
+            <i class="fas fa-copy"></i> Copy
+          </button>
+          <pre id="plz-output"></pre>
+        </div>
+      </div>
     </div>
   </div>
+
   <script>
-    // Tab Switching Logic
+    let apiKey = localStorage.getItem('namsorApiKey');
+    
+    function showToast(message, duration = 3000) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    function showKeyModal() {
+      document.getElementById('apiKeyModal').style.display = 'flex';
+      document.getElementById('keyError').style.display = 'none';
+    }
+
+    function closeModal() {
+      document.getElementById('apiKeyModal').style.display = 'none';
+    }
+
+    async function saveApiKey() {
+      const key = document.getElementById('apiKeyInput').value.trim();
+      if (!key) return;
+
+      try {
+        const testResponse = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/apiUsage', {
+          headers: { 'X-API-KEY': key }
+        });
+        
+        if (!testResponse.ok) throw new Error('Invalid key');
+        
+        localStorage.setItem('namsorApiKey', key);
+        apiKey = key;
+        updateKeyStatus();
+        closeModal();
+        showToast('API key saved successfully!');
+      } catch (error) {
+        showKeyError('Invalid API key. Please try again.');
+      }
+    }
+
+    function showKeyError(message) {
+      const errorDiv = document.getElementById('keyError');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function updateKeyStatus() {
+      const keyStatus = document.getElementById('keyStatus');
+      keyStatus.style.display = apiKey ? 'flex' : 'none';
+    }
+
+    function signOut() {
+      localStorage.removeItem('namsorApiKey');
+      apiKey = null;
+      updateKeyStatus();
+      clearAnalyzer();
+      showToast('Signed out successfully!');
+      document.getElementById('analyzer-btn').click();
+    }
+
     document.getElementById('formatter-btn').addEventListener('click', function() {
       document.getElementById('formatter-container').style.opacity = '1';
       document.getElementById('formatter-container').style.pointerEvents = 'auto';
       document.getElementById('analyzer-container').style.opacity = '0';
       document.getElementById('analyzer-container').style.pointerEvents = 'none';
-      document.getElementById('formatter-btn').classList.add('active');
+      document.getElementById('plz-container').style.opacity = '0';
+      document.getElementById('plz-container').style.pointerEvents = 'none';
+      this.classList.add('active');
       document.getElementById('analyzer-btn').classList.remove('active');
+      document.getElementById('plz-btn').classList.remove('active');
     });
+
     document.getElementById('analyzer-btn').addEventListener('click', function() {
+      if (!apiKey) showKeyModal();
       document.getElementById('formatter-container').style.opacity = '0';
       document.getElementById('formatter-container').style.pointerEvents = 'none';
       document.getElementById('analyzer-container').style.opacity = '1';
       document.getElementById('analyzer-container').style.pointerEvents = 'auto';
+      document.getElementById('plz-container').style.opacity = '0';
+      document.getElementById('plz-container').style.pointerEvents = 'none';
       document.getElementById('formatter-btn').classList.remove('active');
-      document.getElementById('analyzer-btn').classList.add('active');
+      this.classList.add('active');
+      document.getElementById('plz-btn').classList.remove('active');
     });
-    
-    // Name Analyzer Warning Logic
-    document.getElementById('names-analyzer').addEventListener('input', function() {
-      const names = this.value.split('\n').filter(n => n.trim().length > 0);
-      const warning = document.getElementById('name-warning');
-      if (names.length > 4) {
-        warning.style.display = 'block';
-      } else {
-        warning.style.display = 'none';
-      }
+
+    document.getElementById('plz-btn').addEventListener('click', function() {
+      document.getElementById('formatter-container').style.opacity = '0';
+      document.getElementById('formatter-container').style.pointerEvents = 'none';
+      document.getElementById('analyzer-container').style.opacity = '0';
+      document.getElementById('analyzer-container').style.pointerEvents = 'none';
+      document.getElementById('plz-container').style.opacity = '1';
+      document.getElementById('plz-container').style.pointerEvents = 'auto';
+      document.getElementById('formatter-btn').classList.remove('active');
+      document.getElementById('analyzer-btn').classList.remove('active');
+      this.classList.add('active');
     });
-    
-    // Enhanced with extension animations and interactions
+
     function formatOutput() {
       const namesInput = document.getElementById('names').value.trim();
       const companyInput = document.getElementById('company').value.trim();
@@ -485,15 +724,9 @@
       } else {
         output = uniqueFormattedNames.join(' OR ');
       }
-      const outputElement = document.getElementById('output');
-      outputElement.textContent = output;
-      outputElement.style.opacity = 0;
-      setTimeout(() => {
-        outputElement.style.transition = 'opacity 0.3s ease-out';
-        outputElement.style.opacity = 1;
-      }, 10);
+      animateOutput(output);
     }
-    
+
     function formatSimpleOutput() {
       const namesInput = document.getElementById('names').value.trim();
       const companyInput = document.getElementById('company').value.trim();
@@ -518,15 +751,9 @@
       } else {
         output = formattedNames.join(' OR ');
       }
-      const outputElement = document.getElementById('output');
-      outputElement.textContent = output;
-      outputElement.style.opacity = 0;
-      setTimeout(() => {
-        outputElement.style.transition = 'opacity 0.3s ease-out';
-        outputElement.style.opacity = 1;
-      }, 10);
+      animateOutput(output);
     }
-    
+
     function createSpecialCharVariations(name) {
       const variations = [name];
       const replacements = {
@@ -540,9 +767,9 @@
       });
       return [...new Set(variations)];
     }
-    
+
     function copyOutput() {
-      const copyButton = document.querySelector('.copy-button');
+      const copyButton = document.querySelector('#formatter-container .copy-button');
       navigator.clipboard.writeText(document.getElementById('output').textContent)
         .then(() => {
           copyButton.style.background = '#07F468';
@@ -554,94 +781,84 @@
         })
         .catch(err => console.error('Copy failed:', err));
     }
-    
+
     function clearForm() {
       document.getElementById('names').value = '';
       document.getElementById('company').value = '';
       document.getElementById('output').textContent = '';
     }
-    
-    // Name Analyzer Functions - FIXED IMPLEMENTATION
-    function clearAnalyzer() {
-      document.getElementById('names-analyzer').value = '';
-      document.getElementById('country').value = '';
-      document.getElementById('results').innerHTML = '';
-    }
-    
+
     async function splitNames() {
       const fullNames = getInputNames();
       if (!fullNames.length) return;
       
       try {
-        const parsed = await parseNames(fullNames);
-        displaySplitResults(parsed);
+        const response = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/parseNameBatch', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-KEY': apiKey
+          },
+          body: JSON.stringify({
+            personalNames: fullNames.map(name => ({ name }))
+          })
+        });
+        
+        if (!response.ok) throw new Error('API request failed');
+        
+        const data = await response.json();
+        const parsedNames = data.personalNames.map(n => ({
+          fullName: n.name,
+          firstName: n.firstLastName?.firstName || '',
+          lastName: n.firstLastName?.lastName || ''
+        }));
+        displaySplitResults(parsedNames);
       } catch (error) {
         showError(error);
       }
     }
-    
+
     async function analyzeGender() {
       const fullNames = getInputNames();
       const country = document.getElementById('country').value || 'US';
       if (!fullNames.length) return;
       
       try {
-        const parsed = await parseNames(fullNames);
-        const genderData = await getGenderInfo(parsed, country);
-        displayGenderResults(parsed, genderData);
+        const response = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/genderGeoBatch', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-KEY': apiKey
+          },
+          body: JSON.stringify({
+            personalNames: fullNames.map(name => ({
+              firstName: name.split(' ')[0] || '',
+              lastName: name.split(' ').slice(1).join(' ') || '',
+              countryIso2: country
+            }))
+          })
+        });
+        
+        if (!response.ok) throw new Error('API request failed');
+        
+        const data = await response.json();
+        const genderData = data.personalNames.map(n => ({
+          gender: n.likelyGender,
+          confidence: n.probabilityCalibrated
+        }));
+        displayGenderResults(fullNames, genderData);
       } catch (error) {
         showError(error);
       }
     }
-    
+
     function getInputNames() {
       return document.getElementById('names-analyzer').value
         .split('\n')
         .map(n => n.trim())
         .filter(n => n.length > 0);
     }
-    
-    async function parseNames(fullNames) {
-      const response = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/parseNameBatch', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-KEY': '7d93f7164aacaf766698e079dee1ae1e'
-        },
-        body: JSON.stringify({
-          personalNames: fullNames.map(name => ({ name }))
-        })
-      });
-      const data = await response.json();
-      return data.personalNames.map(n => ({
-        fullName: n.name,
-        firstName: n.firstLastName.firstName,
-        lastName: n.firstLastName.lastName
-      }));
-    }
-    
-    async function getGenderInfo(names, country) {
-      const response = await fetch('https://v2.namsor.com/NamSorAPIv2/api2/json/genderGeoBatch', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-KEY': '7d93f7164aacaf766698e079dee1ae1e'
-        },
-        body: JSON.stringify({
-          personalNames: names.map(name => ({
-            firstName: name.firstName,
-            lastName: name.lastName,
-            countryIso2: country
-          }))
-        })
-      });
-      const data = await response.json();
-      return data.personalNames.map(n => ({
-        gender: n.likelyGender,
-        confidence: n.probabilityCalibrated
-      }));
-    }
-    
+
     function displaySplitResults(results) {
       document.getElementById('results').innerHTML = '';
       results.forEach((result, index) => {
@@ -656,17 +873,17 @@
         `;
         setTimeout(() => {
           document.getElementById('results').appendChild(resultDiv);
-        }, index * 100); // Stagger animation
+        }, index * 100);
       });
     }
-    
+
     function displayGenderResults(names, genderData) {
       document.getElementById('results').innerHTML = '';
       names.forEach((name, index) => {
         const resultDiv = document.createElement('div');
         resultDiv.className = `result ${genderData[index].gender?.toLowerCase() || 'unknown'}`;
         resultDiv.innerHTML = `
-          <strong>${name.fullName}</strong>
+          <strong>${name}</strong>
           <div class="details">
             Gender: ${genderData[index].gender || 'Unknown'} 
             (${Math.round(genderData[index].confidence * 100)}% confidence)
@@ -674,10 +891,10 @@
         `;
         setTimeout(() => {
           document.getElementById('results').appendChild(resultDiv);
-        }, index * 100); // Stagger animation
+        }, index * 100);
       });
     }
-    
+
     function showError(error) {
       document.getElementById('results').innerHTML = `
         <div class="result unknown">
@@ -686,36 +903,139 @@
         </div>
       `;
     }
-    
-    // Added extension interactions
-    document.querySelectorAll('button, textarea, input').forEach(element => {
-      element.addEventListener('mouseenter', () => {
-        element.style.transform = 'translateY(-1px)';
-      });
-      element.addEventListener('mouseleave', () => {
-        element.style.transform = 'translateY(0)';
-      });
-    });
-    
-    const textarea = document.getElementById('names');
-    textarea.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 300) + 'px';
-    });
-    
-    document.getElementById('names').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        formatOutput();
+
+    async function findLowestPLZ() {
+      const citiesInput = document.getElementById('city-input').value.trim();
+      if (!citiesInput) return;
+
+      const loading = document.getElementById('plz-loading');
+      const output = document.getElementById('plz-output');
+      const findBtn = document.getElementById('find-plz-btn');
+      loading.style.display = 'block';
+      findBtn.disabled = true;
+      output.textContent = '';
+
+      try {
+        const response = await fetch("plz-codes.json");
+        if (!response.ok) throw new Error(`Failed to fetch PLZ data: ${response.statusText}`);
+        const plzData = await response.json();
+
+        const normalizeCity = (city) => {
+          if (/frankfurt\s*\(oder\)/i.test(city)) return 'frankfurt oder';
+          
+          const aliases = {
+            'munich': 'münchen',
+            'cologne': 'köln',
+            'nuremberg': 'nürnberg',
+            'frankfurt am main': 'frankfurt am main',
+            'frankfurt oder': 'frankfurt oder',
+            'st. katharinen': 'sankt katharinen',
+            'st.katharinen': 'sankt katharinen'
+          };
+
+          const parenthesesContent = city.match(/\(([^)]+)\)/);
+          let additionalInfo = '';
+          if (parenthesesContent) {
+            additionalInfo = parenthesesContent[1].toLowerCase().trim();
+          }
+
+          let normalized = city.toLowerCase()
+            .replace(/\([^)]*\)/g, '')
+            .replace(/[^a-zäöüß]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          normalized = normalized
+            .replace(/ue/g, 'ü')
+            .replace(/oe/g, 'ö')
+            .replace(/ae/g, 'ä')
+            .replace(/ss/g, 'ß')
+            .replace(/(^|\s)st\.?(\s|$)/g, 'sankt ');
+
+          if (normalized.startsWith('berlin')) return 'berlin';
+          if (normalized === 'frankfurt' && additionalInfo === 'oder') return 'frankfurt oder';
+          if (normalized === 'frankfurt' && !additionalInfo) return 'frankfurt am main';
+
+          return aliases[normalized] || normalized;
+        };
+
+        const results = await Promise.all(citiesInput.split('\n').map(rawCity => {
+          const input = rawCity.trim();
+          if (!input) return '';
+
+          const normalized = normalizeCity(input);
+          const matches = plzData.filter(entry => 
+            normalizeCity(entry.City.trim()) === normalized
+          );
+
+          if (matches.length === 0) return `${input}: Not found`;
+
+          const plzCodes = matches.map(entry => parseInt(entry.Plz));
+          const plzGroups = new Map();
+          plzCodes.forEach(plz => {
+            const firstDigit = String(plz).padStart(5, '0').charAt(0);
+            if (!plzGroups.has(firstDigit)) plzGroups.set(firstDigit, []);
+            plzGroups.get(firstDigit).push(plz);
+          });
+
+          const lowestPLZs = Array.from(plzGroups.values()).map(plzs => Math.min(...plzs));
+          const sortedPLZs = lowestPLZs.sort((a, b) => a - b);
+          const formattedPLZs = sortedPLZs.map(plz => String(plz).padStart(5, '0'));
+
+          return `${input}: ${formattedPLZs.join(', ')}`;
+        }));
+
+        output.textContent = results.join('\n');
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+      } finally {
+        loading.style.display = 'none';
+        findBtn.disabled = false;
       }
+    }
+
+    function clearAnalyzer() {
+      document.getElementById('names-analyzer').value = '';
+      document.getElementById('country').value = '';
+      document.getElementById('results').innerHTML = '';
+    }
+
+    function clearPLZFinder() {
+      document.getElementById('city-input').value = '';
+      document.getElementById('plz-output').textContent = '';
+      document.getElementById('plz-loading').style.display = 'none';
+    }
+
+    function copyPLZOutput() {
+      const copyButton = document.querySelector('#plz-container .copy-button');
+      navigator.clipboard.writeText(document.getElementById('plz-output').textContent)
+        .then(() => {
+          copyButton.style.background = '#07F468';
+          copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          setTimeout(() => {
+            copyButton.style.background = 'rgba(255,255,255,0.05)';
+            copyButton.innerHTML = '<i class="fas fa-copy"></i> Copy';
+          }, 1500);
+        })
+        .catch(err => console.error('Copy failed:', err));
+    }
+
+    function animateOutput(text) {
+      const outputElement = document.getElementById('output');
+      outputElement.textContent = text;
+      outputElement.style.opacity = 0;
+      setTimeout(() => {
+        outputElement.style.transition = 'opacity 0.3s ease-out';
+        outputElement.style.opacity = 1;
+      }, 10);
+    }
+
+    document.getElementById('names-analyzer').addEventListener('input', function() {
+      const names = this.value.split('\n').filter(n => n.trim().length > 0);
+      document.getElementById('name-warning').style.display = names.length > 4 ? 'block' : 'none';
     });
-    
-    document.getElementById('company').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        formatOutput();
-      }
-    });
+
+    updateKeyStatus();
   </script>
 </body>
 </html>
